@@ -1,0 +1,67 @@
+#include<iostream>
+
+struct Node{
+    int value;
+    struct Node* next;
+}
+
+void push_left(Node** head, int val){
+    Node* i = (Node*)malloc(sizeof(Node))
+    i->value = val;
+    i->next = *head;
+    *head = i;
+}
+
+void clear_list(Node** head){
+    Node* nullifier = *head;
+    while(*head-> != NULL{   //nullptr is actually a better practise in c++ due to the ambiguity of NULL
+        nullifier->value = *head;
+        *head = *head->next;
+        free (nullifier);
+    }
+    free (*head);
+    *head = NULL;
+}
+
+int pop(Node** head, int index) // pointer to pointer needed since the elements would be reindexed 
+{
+    if (index == 0)
+    {
+        int a = (*head)->value;
+        Node* i = (*head);
+        (*head) = (*head)->next;
+        free(i);
+        return a;
+    }
+
+    if (index != 0)
+    {
+        Node* ind = *head;
+        for (int i = 0; i < index; ++i){
+            if (ind->next != NULL){
+                if (i == index - 1){
+                    int x = (ind->next)->value;
+                    Node* a = ind->next;
+                    ind->next = ind->next->next;
+                    free(a);
+                    return x;
+                }
+                ind = ind->next;
+            }
+        }
+    }
+}
+
+
+void remove(Node** head, int value) //remove first element with the given value
+{
+    Node* node = *head;
+    while(node->next != NULL){
+        if(*node == value){
+            free(node); 
+        }
+        node = *head->next;
+    }
+    *head = node;
+}
+
