@@ -196,26 +196,23 @@ vector<double> search_time_estimator(vector<int> v, Node* root) //root is the in
     return search_time_list;
 }
 
-vector<double> insert_time_estimator(vector<int> v, Node* root) //root is the initial node where iteration starts
+double insert_time_estimator(vector<int> v, Node* root) //root is the initial node where iteration starts
 {
     vector<int>::iterator it; //iterator for input list of integers for performing insertions into the AVl tree
-    vector<double> insert_time_list;
+    //vector<double> insert_time_list;
     struct timeval start, end;
+    double time_taken;
+    gettimeofday(&start, NULL);
+    ios_base::sync_with_stdio(false);
     
     for(it = v.begin(); it != v.end(); ++it){
-        
-        gettimeofday(&start, NULL);
-        ios_base::sync_with_stdio(false);
-    
         root = insertNode(root,*it); //cycles of insertions
-        
-        gettimeofday(&end, NULL);
-        double time_taken;
-        time_taken = (end.tv_sec - start.tv_sec) * 1e6;
-        time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-        insert_time_list.push_back(time_taken);
     }
-    return insert_time_list;
+    gettimeofday(&end, NULL);
+    time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+    //insert_time_list.push_back(time_taken);
+    return time_taken;
 }
 
 vector<double> delete_time_estimator(vector<int> v, Node* root) //root is the initial node where iteration starts
@@ -268,14 +265,25 @@ void printTree(Node *root, string indent, bool last) {
 
 int main() {
 
-  vector<int> insertion_vector = {10,12,13,33,21, 55, 50, 100, 88, 77, 98, 60, 50, 40, 4, 44, 43, 23, 61, 62, 103, 107, 109, 59, 56, 77, 78, 79, 81, 83};
-  vector<int> deletion_vector = {10,12,13,33,21, 55, 50, 100, 88, 77, 98, 60, 50, 40, 4, 44, 43, 23, 61, 62, 103, 107, 109, 59, 56, 77, 78, 79, 81, 83};
-  vector<int> search_vector = {10,12,13,33,21, 55, 50, 100, 88, 77, 98, 60, 50, 40, 4, 44, 43, 23, 61, 62, 103, 107, 109, 59, 56, 77, 78, 79, 81, 83};
+  vector<int> insertion_vector(1500000, 10);
+  vector<int> deletion_vector(1000000, 5);
+  vector<int> search_vector(1000000, 6);
   
-  vector<double> result_insert = insert_time_estimator(insertion_vector, NULL);
+  //vector<double> result_insert = insert_time_estimator(insertion_vector, NULL);
   
   vector<double>::iterator pt;
   
+  
+  vector<double> insertion_time;
+  for(int i = 0; i < 100000; ++i){
+      vector<int> sample_vector(i,0);
+      insertion_time.push_back(insert_time_estimator(sample_vector, NULL));
+  }
+  
+  for(int j = 0 ; j < 100000; ++j){
+      cout << insertion_time[j] << "," ;
+  }
+  /*
   cout<< "THIS IS THE INSERT TIME VECTOR" << endl;
   for(pt = result_insert.begin(); pt != result_insert.end(); ++pt){
       cout << *pt << setprecision(6) << ", ";
@@ -284,14 +292,17 @@ int main() {
   Node* New_Tree_Node = Tree_Creator(insertion_vector, NULL);
     
   vector<double> result_delete = delete_time_estimator(deletion_vector, New_Tree_Node);
-  
+  */
+  /*
   cout<< "THIS IS THE DELETE TIME VECTOR" << endl;
   for(pt = result_delete.begin(); pt != result_delete.end(); ++pt){
       cout << *pt << setprecision(6) << ", ";
   }
+  */
   
   //printTree(result, "", true);
   return 0;
 }
+
 
 
